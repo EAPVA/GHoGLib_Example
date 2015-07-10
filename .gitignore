@@ -40,3 +40,8 @@
 src/.gitignore
 include/.gitignore
 3rdParty/.gitignore
+
+.ptp-sync/*
+.settings/*
+resources/*
+
