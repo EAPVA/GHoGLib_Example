@@ -209,7 +209,7 @@ int main(int argc,
 	cv::Size block_stride(12, 12);
 	cv::Size histogram_grid = ghog::lib::Utils::partition(detection_window,
 		cell_size);
-	std::cout << histogram_grid << std::endl;
+	std::cout << "Histogram grid: " << histogram_grid << std::endl;
 	int num_bins = 9;
 	std::vector< float > descriptorValue;
 
