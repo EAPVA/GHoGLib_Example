@@ -21,7 +21,7 @@ using namespace std;
 // HOGDescriptor visual_imagealizer
 // adapted for arbitrary size of feature sets and training images
 Mat get_hogdescriptor_visual_image(Mat& origImg,
-	vector< float >& descriptorValues,
+	vector<float>& descriptorValues,
 	Size winSize,
 	Size cellSize,
 	int scaleFactor,
@@ -195,7 +195,7 @@ Mat get_hogdescriptor_visual_image(Mat& origImg,
 int main(int argc,
 	char** argv)
 {
-	std::vector< std::string > file_list = getImagesList("resources/images");
+	std::vector<std::string> file_list = getImagesList("resources/images");
 	cv::Mat train_data_ghoglib;
 	cv::Mat expected_outputs;
 	cv::Mat img;
@@ -203,15 +203,15 @@ int main(int argc,
 	cv::Mat grad_phase;
 	cv::Mat histograms;
 	cv::Mat descriptor;
-	cv::Size detection_window(180, 240);
-	cv::Size cell_size(12, 12);
-	cv::Size block_size(24, 24);
-	cv::Size block_stride(12, 12);
+	cv::Size detection_window(320, 320);
+	cv::Size cell_size(16, 16);
+	cv::Size block_size(32, 32);
+	cv::Size block_stride(16, 16);
 	cv::Size histogram_grid = ghog::lib::Utils::partition(detection_window,
 		cell_size);
 	std::cout << "Histogram grid: " << histogram_grid << std::endl;
 	int num_bins = 9;
-	std::vector< float > descriptorValue;
+	std::vector<float> descriptorValue;
 
 	ghog::lib::HogDescriptor ghog_lib("hog.xml");
 	int descriptor_dim = ghog_lib.get_descriptor_size();
@@ -241,20 +241,20 @@ int main(int argc,
 			histograms);
 		descriptor.copyTo(train_data_ghoglib.row(i));
 		img = cv::imread(file_list[i], CV_LOAD_IMAGE_COLOR);
-		std::vector< float > temp;
-		std::vector< float > temp_lib;
+		std::vector<float> temp;
+		std::vector<float> temp_lib;
 		hog_opencv.compute(img, temp);
 		for(int j = 0; j < temp.size(); ++j)
 		{
 			//std::cout << "train_data_opencv " << std::endl;
-			train_data_opencv.at< float >(i, j) = temp[j];
+			train_data_opencv.at<float>(i, j) = temp[j];
 		}
 
 		for(int aux1 = 0; aux1 < descriptor.rows; aux1++)
 		{
 			for(int aux2 = 0; aux2 < descriptor.cols; aux2++)
 			{
-				temp_lib.push_back(descriptor.at< float >(aux1, aux2));
+				temp_lib.push_back(descriptor.at<float>(aux1, aux2));
 
 			}
 		}
@@ -265,8 +265,8 @@ int main(int argc,
 //			<< std::endl;
 
 		// Gera imagem do descrito para o opencv
-		Mat result = get_hogdescriptor_visual_image(img, temp, Size(180, 240),
-			Size(12, 12), 1, 3);
+		Mat result = get_hogdescriptor_visual_image(img, temp, detection_window,
+			cell_size, 1, 3);
 
 //		char path[100] = "resources/images/desc_";
 		char path[100] = "";
@@ -276,7 +276,7 @@ int main(int argc,
 
 		// gera imagem do descrito para a lib GHoG
 		Mat result2 = get_hogdescriptor_visual_image(img, temp_lib,
-			Size(180, 240), Size(12, 12), 1, 3);
+			detection_window, cell_size, 1, 3);
 
 		//char path[100] = "resources/images/desc_";
 		char path2[100] = "";
